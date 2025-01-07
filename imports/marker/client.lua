@@ -144,6 +144,18 @@ function lib.marker.new(options)
     error(("expected marker type to have type 'string' or 'number' (received %s)"):format(type(options.type)))
   end
 
+  if type(options.bobUpAndDown) ~= "boolean" then
+    options.bobUpAndDown = defaultBobUpAndDown
+  end
+
+  if type(options.faceCamera) ~= "boolean" then
+    options.faceCamera = defaultFaceCamera
+  end
+
+  if type(options.rotate) ~= "boolean" then
+    options.rotate = defaultRotate
+  end
+
   local self = {}
   self.type = markerType
   self.coords = options.coords
@@ -152,9 +164,9 @@ function lib.marker.new(options)
   self.height = options.height or defaultSize.height
   self.rotation = options.rotation or defaultRotation
   self.direction = options.direction or defaultDirection
-  self.bobUpAndDown = options.bobUpAndDown or defaultBobUpAndDown
-  self.faceCamera = options.faceCamera or defaultFaceCamera
-  self.rotate = options.rotate or defaultRotate
+  self.bobUpAndDown = options.bobUpAndDown
+  self.faceCamera = options.faceCamera
+  self.rotate = options.rotate
   self.textureDict = options.textureDict or defaultTextureDict
   self.textureName = options.textureName or defaultTextureName
   self.draw = drawMarker
