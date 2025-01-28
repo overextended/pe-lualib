@@ -114,6 +114,10 @@ local function removeZone(zone)
 
     table.remove(exitingZones, exitingZones:indexOf(zone))
     table.remove(enteringZones, enteringZones:indexOf(zone))
+
+    if zone.insideZone and zone.onExit then
+        zone:onExit()
+    end
 end
 
 CreateThread(function()
