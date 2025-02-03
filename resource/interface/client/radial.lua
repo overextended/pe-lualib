@@ -2,7 +2,10 @@
 ---@field icon string | {[1]: IconProp, [2]: string};
 ---@field label string
 ---@field menu? string
----@field onSelect? fun(currentMenu: string | nil, itemIndex: number) | string
+---@field onSelect? fun(currentMenu: string | nil, itemIndex: number)
+---@field canSelect? fun(currentMenu: string | nil, itemIndex: number)
+---@field onEvent? string
+---@field onExport? string
 ---@field [string] any
 ---@field keepOpen? boolean
 ---@field iconWidth? number
@@ -209,6 +212,13 @@ RegisterNUICallback('radialClick', function(index, cb)
     end
 
     local menuResource = currentRadial and currentRadial.resource or item.resource
+    
+    if item.canSelect then
+        local success, resp = pcall(item.canSelect, currentMenu, itemIndex)
+        if not success then
+            return
+        end
+    end
 
     if item.menu then
         menuHistory[#menuHistory + 1] = { id = currentRadial and currentRadial.id, option = item.menu }
@@ -216,15 +226,18 @@ RegisterNUICallback('radialClick', function(index, cb)
     elseif not item.keepOpen then
         lib.hideRadial()
     end
-
-    local onSelect = item.onSelect
-
-    if onSelect then
-        if type(onSelect) == 'string' then
-            return exports[menuResource][onSelect](0, currentMenu, itemIndex)
+    
+    if item.onEvent then TriggerEvent(item.onEvent, currentMenu, itemIndex) end
+    if item.onSelect then
+        if type(item.onSelect) == 'string' then
+            return exports[menuResource][item.onSelect](0, currentMenu, itemIndex)
         end
 
-        onSelect(currentMenu, itemIndex)
+        item.onSelect(currentMenu, itemIndex)
+    end
+
+    if item.onExport then 
+        return exports[menuResource][item.onExport](0, currentMenu, itemIndex)
     end
 end)
 
