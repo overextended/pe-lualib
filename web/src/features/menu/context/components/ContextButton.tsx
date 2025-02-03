@@ -7,8 +7,8 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import MarkdownComponents from '../../../../config/MarkdownComponents';
 import LibIcon from '../../../../components/LibIcon';
 
-const openMenu = (id: string | undefined) => {
-  fetchNui<ContextMenuProps>('openContext', { id: id, back: false });
+const openMenu = (id: string | undefined, optionId: string | undefined) => {
+  fetchNui<ContextMenuProps>('openContext', { id: id, optionId: optionId, back: false });
 };
 
 const clickContext = (id: string) => {
@@ -96,7 +96,7 @@ const ContextButton: React.FC<{
             onClick={() =>
               !button.disabled && !button.readOnly
                 ? button.menu
-                  ? openMenu(button.menu)
+                  ? openMenu(button.menu, buttonKey)
                   : clickContext(buttonKey)
                 : null
             }

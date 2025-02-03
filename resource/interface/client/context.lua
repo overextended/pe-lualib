@@ -9,6 +9,7 @@ local openContextMenu = nil
 ---@field image? string
 ---@field progress? number
 ---@field onSelect? fun(args: any)
+---@field onMenu? fun(args: any)
 ---@field arrow? boolean
 ---@field description? string
 ---@field metadata? string | { [string]: any } | string[]
@@ -83,7 +84,24 @@ function lib.getOpenContextMenu() return openContextMenu end
 function lib.hideContext(onExit) closeContext(nil, nil, onExit) end
 
 RegisterNUICallback('openContext', function(data, cb)
-    if data.back and contextMenus[openContextMenu].onBack then contextMenus[openContextMenu].onBack() end
+    if data.back then 
+        if contextMenus[openContextMenu].onBack then
+            contextMenus[openContextMenu].onBack()
+        end
+    else
+        if not data.optionId then return end
+        local id = data.optionId
+        if math.type(tonumber(id)) == 'float' then
+            id = math.tointeger(id)
+        elseif tonumber(id) then
+            id += 1
+        end
+
+        if contextMenus[openContextMenu].options[id].onMenu then
+            contextMenus[openContextMenu].options[id].onMenu()
+        end
+    end
+
     cb(1)
     lib.showContext(data.id)
 end)
