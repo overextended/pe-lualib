@@ -1,5 +1,6 @@
 {
   "language": "Lietuvių",
+  "settings": "Nustatymai",
   "ui": {
     "cancel": "Atšaukti",
     "close": "Uždaryti",
@@ -9,17 +10,17 @@
       "locale": "Pakeisti kalbą",
       "locale_description": "Dabartinė: ${language} (%s)",
       "notification_audio": "Pranešimo garsas",
-      "notification_position": "Notification position"
+      "notification_position": "Pranešimo pozicija"
     },
     "position": {
-      "bottom": "Bottom",
-      "bottom-left": "Bottom-left",
-      "bottom-right": "Bottom-right",
-      "center-left": "Center-left",
-      "center-right": "Center-right",
-      "top": "Top",
-      "top-left": "Top-left",
-      "top-right": "Top-right"
+      "bottom": "Apačioje",
+      "bottom-left": "Apačioje-kairėje",
+      "bottom-right": "Apačioje-dešinėje",
+      "center-left": "Centre-kairėje",
+      "center-right": "Centre-dešinėje",
+      "top": "Viršuje",
+      "top-left": "Viršuje-kairėje",
+      "top-right": "Viršuje-dešinėje"
     }
   },
   "open_radial_menu": "Atidaryti radialinį meniu",
