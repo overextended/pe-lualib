@@ -27,6 +27,7 @@ setmetatable(currentDate, {
 ---@field id number
 ---@field debug? boolean
 ---@field lastRun? number
+---@field allowExpiredTasks? boolean
 
 ---@class OxTask : OxTaskProperties
 ---@field expression string
@@ -353,7 +354,14 @@ function OxTask:scheduleTask()
     local sleep = runAt - currentTime
 
     if sleep < 0 then
-        return self:stop(self.debug and ('scheduled time expired %s seconds ago'):format(-sleep))
+        if self.allowExpiredTasks then
+            if self.debug then
+                print(('Task %s is slightly overdue by %d seconds, but will execute due to allowExpiredTasks'):format(self.id, -sleep))
+            end
+            sleep = 1 -- hacky way to force the task to run
+        else
+            return self:stop(self.debug and ('scheduled time expired %s seconds ago'):format(-sleep))
+        end
     end
 
     local timeAsString = self:getTimeAsString(runAt)
@@ -409,7 +417,7 @@ end
 
 ---@param expression string A cron expression such as `* * * * *` representing minute, hour, day, month, and day of the week.
 ---@param job fun(task: OxTask, date: osdate)
----@param options? { debug?: boolean }
+---@param options? { debug?: boolean, allowExpiredTasks?: boolean }
 ---Creates a new [cronjob](https://en.wikipedia.org/wiki/Cron), scheduling a task to run at fixed times or intervals.
 ---Supports numbers, any value `*`, lists `1,2,3`, ranges `1-3`, and steps `*/4`.
 ---Day of the week is a range of `1-7` starting from Sunday and allows short-names (i.e. sun, mon, tue).
